@@ -1,4 +1,6 @@
-
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../features/cart/cartSlice"; // Adjust the path to your cartSlice
 
 const prods = [
     {
@@ -52,6 +54,21 @@ const prods = [
 ];
 
 export const Products = () => {
+    const dispatch = useDispatch();
+    const [addedToCart, setAddedToCart] = useState<number[]>([]); // Track IDs of products added to cart
+
+    const handleAddToCart = (product: typeof prods[number]) => {
+        const itemToAdd = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: 1, // Default quantity
+        };
+        dispatch(addItem(itemToAdd));
+        setAddedToCart((prev) => [...prev, product.id]); // Mark product as added
+    };
+
+    const isProductAdded = (id: number) => addedToCart.includes(id); // Check if product is already added
 
     return (
         <div>
@@ -61,36 +78,47 @@ export const Products = () => {
             <h2 className="text-2xl font-bold text-center my-8">Air Purifying Plants</h2>
 
             <div className="flex flex-row gap-4 justify-between flex-wrap">
-                {prods.map(prod => prod.category === "Air Purifying Plants" && (
+                {prods.map((prod) => prod.category === "Air Purifying Plants" && (
                     <div key={prod.id} className="border p-4 rounded shadow-md lg:w-[30%] w-full">
                         <h2 className="text-xl font-semibold">{prod.name}</h2>
                         <p className="text-gray-600">Price: ${prod.price}</p>
                         <p>{prod.description}</p>
                         <img src={prod.image} alt={prod.name} className="object-cover my-2 w-full h-auto" />
                         <button
-                            onClick={() => console.log(prod)}
-                            className="bg-blue-500 text-white px-4 py-2 mt-2 rounded w-full"
+                            onClick={() => handleAddToCart(prod)}
+                            disabled={isProductAdded(prod.id)} // Disable if already added
+                            className={`px-4 py-2 mt-2 rounded w-full ${
+                                isProductAdded(prod.id)
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-blue-500 text-white"
+                            }`}
                         >
-                            Add to Cart
+                            {isProductAdded(prod.id) ? "Added to Cart" : "Add to Cart"}
                         </button>
                     </div>
                 ))}
             </div>
+
             {/* Display filtered products */}
-            <h2 className="text-2xl font-bold text-center my-8">Auromatic Fragment Plants</h2>
+            <h2 className="text-2xl font-bold text-center my-8">Aromatic Fragment Plants</h2>
 
             <div className="flex flex-col lg:flex-row gap-4 justify-between flex-wrap">
-                {prods.map(prod => prod.category === "Aromatic Fragment Plants" && (
+                {prods.map((prod) => prod.category === "Aromatic Fragment Plants" && (
                     <div key={prod.id} className="border p-4 rounded shadow-md lg:w-[30%] w-full">
                         <h2 className="text-xl font-semibold">{prod.name}</h2>
                         <p className="text-gray-600">Price: ${prod.price}</p>
                         <p>{prod.description}</p>
                         <img src={prod.image} alt={prod.name} className=" object-cover my-2 w-full" />
-                        <button 
-                            onClick={() => console.log(prod)} 
-                            className="bg-blue-500 text-white px-4 py-2 mt-2 rounded w-full"
+                        <button
+                            onClick={() => handleAddToCart(prod)}
+                            disabled={isProductAdded(prod.id)} // Disable if already added
+                            className={`px-4 py-2 mt-2 rounded w-full ${
+                                isProductAdded(prod.id)
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-blue-500 text-white"
+                            }`}
                         >
-                            Add to Cart
+                            {isProductAdded(prod.id) ? "Added to Cart" : "Add to Cart"}
                         </button>
                     </div>
                 ))}
