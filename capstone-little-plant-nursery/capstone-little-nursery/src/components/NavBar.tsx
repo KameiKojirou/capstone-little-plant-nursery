@@ -9,7 +9,7 @@ export const NavBar = () => {
     );
 
     return (
-        <div className="flex flex-row gap-2 p-4 bg-base-100 justify-between">
+        <div className="flex flex-row gap-2 p-4 bg-green-400 justify-between">
             <Link to="/" className="btn btn-ghost btn-lg normal-case flex flex-row">
                 <img src="/img/paradise-nursery-logo.png" alt="logo" className="h-12 rounded-full" />
                 <div className="flex flex-col justify-start text-start">

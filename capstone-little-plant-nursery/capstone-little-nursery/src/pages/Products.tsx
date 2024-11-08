@@ -63,7 +63,9 @@ export const Products = () => {
             name: product.name,
             price: product.price,
             quantity: 1, // Default quantity
+            image: product.image, // Include the image property
         };
+        console.log("Dispatching to cart:", itemToAdd); // Debugging log
         dispatch(addItem(itemToAdd));
         setAddedToCart((prev) => [...prev, product.id]); // Mark product as added
     };
@@ -78,7 +80,7 @@ export const Products = () => {
             <h2 className="text-2xl font-bold text-center my-8">Air Purifying Plants</h2>
 
             <div className="flex flex-row gap-4 justify-between flex-wrap">
-                {prods.map((prod) => prod.category === "Air Purifying Plants" && (
+                {prods.filter(prod => prod.category === "Air Purifying Plants").map(prod => (
                     <div key={prod.id} className="border p-4 rounded shadow-md lg:w-[30%] w-full">
                         <h2 className="text-xl font-semibold">{prod.name}</h2>
                         <p className="text-gray-600">Price: ${prod.price}</p>
@@ -99,16 +101,15 @@ export const Products = () => {
                 ))}
             </div>
 
-            {/* Display filtered products */}
             <h2 className="text-2xl font-bold text-center my-8">Aromatic Fragment Plants</h2>
 
             <div className="flex flex-col lg:flex-row gap-4 justify-between flex-wrap">
-                {prods.map((prod) => prod.category === "Aromatic Fragment Plants" && (
+                {prods.filter(prod => prod.category === "Aromatic Fragment Plants").map(prod => (
                     <div key={prod.id} className="border p-4 rounded shadow-md lg:w-[30%] w-full">
                         <h2 className="text-xl font-semibold">{prod.name}</h2>
                         <p className="text-gray-600">Price: ${prod.price}</p>
                         <p>{prod.description}</p>
-                        <img src={prod.image} alt={prod.name} className=" object-cover my-2 w-full" />
+                        <img src={prod.image} alt={prod.name} className="object-cover my-2 w-full h-auto" />
                         <button
                             onClick={() => handleAddToCart(prod)}
                             disabled={isProductAdded(prod.id)} // Disable if already added
